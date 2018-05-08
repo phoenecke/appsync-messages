@@ -1,0 +1,41 @@
+﻿type Message {
+  id: ID!
+  title: String!
+}
+
+type MessageConnection {
+  items: [Message]
+  nextToken: String
+}
+
+type Mutation {
+  createMessage(input: CreateMessageInput!): Message
+  deleteMessage(input: DeleteMessageInput!): Message
+  updateMessage(input: UpdateMessageInput!): Message
+}
+
+type Query {
+  getMessage(id: ID!): Message
+  listMessages(after: String, first: Int): MessageConnection
+}
+
+type Subscription {
+  onCreateMessage(id: ID, title: String): Message
+    @aws_subscribe(mutations:["createMessage"])
+  onDeleteMessage(id: ID, title: String): Message
+    @aws_subscribe(mutations:["deleteMessage"])
+  onUpdateMessage(id: ID, title: String): Message
+    @aws_subscribe(mutations:["updateMessage"])
+}
+
+input CreateMessageInput {
+  title: String!
+}
+
+input DeleteMessageInput {
+  id: ID!
+}
+
+input UpdateMessageInput {
+  title: String
+}
